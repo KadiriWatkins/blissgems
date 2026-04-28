@@ -9,6 +9,7 @@ import dev.xoperr.blissgems.utils.CustomItemManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -146,7 +147,7 @@ public class CooldownDisplayManager {
         GemRegistry registry = this.plugin.getGemRegistry();
 
         // Priority 1: Check main hand (for using abilities)
-        org.bukkit.inventory.ItemStack mainHand = player.getInventory().getItemInMainHand();
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
         if (mainHand != null) {
             String oraxenId = CustomItemManager.getIdByItem(mainHand);
             if (oraxenId != null) {
@@ -165,7 +166,7 @@ public class CooldownDisplayManager {
         }
 
         // Priority 2: Check offhand (for passives)
-        org.bukkit.inventory.ItemStack offHand = player.getInventory().getItemInOffHand();
+        ItemStack offHand = player.getInventory().getItemInOffHand();
         if (offHand != null) {
             String oraxenId = CustomItemManager.getIdByItem(offHand);
             if (oraxenId != null) {
@@ -566,8 +567,10 @@ public class CooldownDisplayManager {
     private String getCustomGemIcon(GemType gemType) {
         return switch (gemType) {
             case ASTRA -> "\uE000";    // Custom Astra icon
+            case AURATUS -> null;
             case FIRE -> "\uE001";     // Custom Fire icon
             case FLUX -> "\uE002";     // Custom Flux icon
+            case HERETIC -> null;
             case LIFE -> "\uE003";     // Custom Life icon
             case PUFF -> "\uE004";     // Custom Puff icon
             case SPEED -> "\uE005";    // Custom Speed icon
@@ -583,8 +586,10 @@ public class CooldownDisplayManager {
     private String getAbilityIcon(GemType gemType, int abilityIndex) {
         return switch (gemType) {
             case ASTRA -> abilityIndex == 0 ? "\uE010" : "\uE011";      // Daggers / Projection
+            case AURATUS -> null;
             case FIRE -> abilityIndex == 0 ? "\uE012" : "\uE013";       // Fireball / Campfire
             case FLUX -> abilityIndex == 0 ? "\uE014" : "\uE015";        // Beam / Ground
+            case HERETIC -> null;
             case LIFE -> abilityIndex == 0 ? "\uE016" : "\uE017";       // Drainer / Circle
             case PUFF -> abilityIndex == 0 ? "\uE018" : "\uE019";         // Dash / Bash
             case SPEED -> abilityIndex == 0 ? "\uE01A" : "\uE01B";      // Blur / Storm

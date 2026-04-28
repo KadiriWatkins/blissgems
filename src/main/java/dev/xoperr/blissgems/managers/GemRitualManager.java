@@ -624,6 +624,8 @@ public class GemRitualManager {
             case SPEED -> Color.fromRGB(255, 255, 85);    // Yellow
             case STRENGTH -> Color.fromRGB(170, 0, 0);    // Dark red
             case WEALTH -> Color.fromRGB(255, 170, 0);    // Gold
+            case HERETIC -> Color.fromRGB(187, 0, 0); //Dark red
+            case AURATUS -> Color.fromRGB(255, 247, 68); //Light Yellow
         };
     }
 }

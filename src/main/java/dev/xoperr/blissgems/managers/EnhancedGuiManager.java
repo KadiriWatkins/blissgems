@@ -650,6 +650,8 @@ public class EnhancedGuiManager implements Listener {
         if (gemType != null) {
             glassMaterial = switch (gemType) {
                 case FIRE -> Material.RED_STAINED_GLASS_PANE;
+                case HERETIC -> Material.RED_STAINED_GLASS_PANE;
+                case AURATUS -> Material.YELLOW_STAINED_GLASS_PANE;
                 case SPEED -> Material.YELLOW_STAINED_GLASS_PANE;
                 case WEALTH -> Material.CYAN_STAINED_GLASS_PANE;
                 case ASTRA -> Material.MAGENTA_STAINED_GLASS_PANE;
