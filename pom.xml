@@ -76,30 +76,6 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -109,16 +85,18 @@
         <finalName>BlissGems-${project.version}</finalName>
 
         <plugins>
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
 
+            <!-- JAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -136,7 +114,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.5.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -155,7 +133,7 @@
                 </executions>
             </plugin>
 
-            <!-- ProGuard Obfuscation Plugin - Standalone -->
+            <!-- ProGuard Obfuscation Plugin -->
             <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
@@ -185,11 +163,11 @@
 
                         <!-- Keep main plugin class and JavaPlugin extension -->
                         <option>-keep public class dev.xoperr.blissgems.BlissGems {
-    public void onEnable();
-    public void onDisable();
-    public void onLoad();
-    public protected *;
-}</option>
+                            public void onEnable();
+                            public void onDisable();
+                            public void onLoad();
+                            public protected *;
+                            }</option>
 
                         <!-- Keep all Bukkit/Spigot required classes -->
                         <option>-keep public class * extends org.bukkit.plugin.java.JavaPlugin</option>
@@ -200,28 +178,28 @@
 
                         <!-- Keep enum methods that Bukkit/Java needs -->
                         <option>-keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-    **[] $VALUES;
-    public *;
-}</option>
+                            public static **[] values();
+                            public static ** valueOf(java.lang.String);
+                            **[] $VALUES;
+                            public *;
+                            }</option>
 
                         <!-- Keep public API classes for other plugins -->
                         <option>-keep public class dev.xoperr.blissgems.BlissGems {
-    public *;
-}</option>
+                            public *;
+                            }</option>
                         <option>-keep public class dev.xoperr.blissgems.utils.** {
-    public *;
-}</option>
+                            public *;
+                            }</option>
                         <option>-keep public class dev.xoperr.blissgems.managers.** {
-    public *;
-}</option>
+                            public *;
+                            }</option>
                         <!-- Keep Addon API classes (used by external plugins) -->
                         <option>-keep public class dev.xoperr.blissgems.api.** { *; }</option>
                         <option>-keep public interface dev.xoperr.blissgems.api.** { *; }</option>
                         <option>-keep public enum dev.xoperr.blissgems.utils.GemType {
-    *;
-}</option>
+                            *;
+                            }</option>
 
                         <!-- Keep relocated FastStats classes and Gson (uses reflection) -->
                         <option>-keep class dev.xoperr.blissgems.libs.faststats.** { *; }</option>
