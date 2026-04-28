@@ -1,12 +1,11 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package dev.xoperr.blissgems.utils;
 
 public enum GemType {
     ASTRA("astra", "Astra", "Wield phantom daggers and explore astral dimensions"),
+    AURATUS("auratus", "Auratus", "Wield divine chains and an unbreakable parry shield"),
     FIRE("fire", "Fire", "Burn your enemies with charged fireballs and cozy campfires"),
     FLUX("flux", "Flux", "Stun enemies and unleash electric power"),
+    HERETIC("heretic", "Heretic", "Bleed your enemies and link their fates in blood"),
     LIFE("life", "Life", "Heal yourself and drain the life from enemies"),
     PUFF("puff", "Puff", "Defy gravity with double jumps and immunity to fall damage"),
     SPEED("speed", "Speed", "Move faster and sedate your foes"),
@@ -23,35 +22,27 @@ public enum GemType {
         this.description = description;
     }
 
-    public String getId() {
-        return this.id;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
+    public String getId() { return this.id; }
+    public String getDisplayName() { return this.displayName; }
+    public String getDescription() { return this.description; }
 
     public String getColor() {
         return switch (this) {
-            case ASTRA -> "\u00a7d";    // Light Purple (Mystical/Ethereal)
-            case FIRE -> "\u00a7c";     // Red (Fire/Burning)
-            case FLUX -> "\u00a7b";     // Aqua (Electric/Energy)
-            case LIFE -> "\u00a7a";     // Green (Nature/Healing)
-            case PUFF -> "\u00a7f";     // White (Air/Clouds)
-            case SPEED -> "\u00a7e";    // Yellow (Fast/Quick)
-            case STRENGTH -> "\u00a74"; // Dark Red (Power/Strength)
-            case WEALTH -> "\u00a76";   // Gold (Riches/Fortune)
+            case ASTRA    -> "\u00a7d";
+            case AURATUS  -> "\u00a7e";
+            case FIRE     -> "\u00a7c";
+            case FLUX     -> "\u00a7b";
+            case HERETIC  -> "\u00a74";
+            case LIFE     -> "\u00a7a";
+            case PUFF     -> "\u00a7f";
+            case SPEED    -> "\u00a7e";
+            case STRENGTH -> "\u00a74";
+            case WEALTH   -> "\u00a76";
         };
     }
 
     public static GemType fromOraxenId(String oraxenId) {
-        if (oraxenId == null) {
-            return null;
-        }
+        if (oraxenId == null) return null;
         for (GemType type : GemType.values()) {
             if (!oraxenId.toLowerCase().startsWith(type.id + "_gem")) continue;
             return type;
@@ -60,12 +51,8 @@ public enum GemType {
     }
 
     public static int getTierFromOraxenId(String oraxenId) {
-        if (oraxenId == null) {
-            return 1;
-        }
-        if (oraxenId.endsWith("_gem_t2")) {
-            return 2;
-        }
+        if (oraxenId == null) return 1;
+        if (oraxenId.endsWith("_gem_t2")) return 2;
         return 1;
     }
 
@@ -77,4 +64,3 @@ public enum GemType {
         return oraxenId != null && oraxenId.contains("_gem_t");
     }
 }
-

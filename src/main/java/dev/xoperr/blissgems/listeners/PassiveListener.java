@@ -76,8 +76,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.GameMode;
 import dev.xoperr.blissgems.abilities.FluxAbilities;
 import dev.xoperr.blissgems.abilities.SpeedAbilities;
-import dev.xoperr.blissgems.abilities.WealthAbilities;
-import java.util.ArrayList;
+import dev.xoperr.blissgems.abilities.WealthAbilities;import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.Location;
@@ -91,7 +90,7 @@ import org.bukkit.plugin.Plugin;
 import dev.xoperr.blissgems.utils.ParticleUtils;
 
 public class PassiveListener
-implements Listener {
+        implements Listener {
     private final BlissGems plugin;
     private final Map<UUID, Integer> jumpsRemaining = new HashMap<>();
 
@@ -334,8 +333,8 @@ implements Listener {
         if (remaining - 1 > 0) {
             this.plugin.getServer().getScheduler().runTaskLater((Plugin)this.plugin, () -> {
                 if (player.isOnline() && !player.isOnGround()
-                    && player.getGameMode() != GameMode.CREATIVE
-                    && player.getGameMode() != GameMode.SPECTATOR) {
+                        && player.getGameMode() != GameMode.CREATIVE
+                        && player.getGameMode() != GameMode.SPECTATOR) {
                     player.setAllowFlight(true);
                 }
             }, 2L);
@@ -600,7 +599,7 @@ implements Listener {
 
         // Check if killer has Astra gem (offhand or mainhand)
         boolean hasAstra = this.plugin.getGemManager().hasGemTypeInOffhand(killer, GemType.ASTRA)
-                        || isHoldingAstraGem(killer);
+                || isHoldingAstraGem(killer);
         if (!hasAstra) return;
 
         if (!this.plugin.getEnergyManager().arePassivesActive(killer)) return;
@@ -626,7 +625,7 @@ implements Listener {
 
         // Check Astra gem in offhand or mainhand
         boolean hasAstra = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.ASTRA)
-                        || isHoldingAstraGem(player);
+                || isHoldingAstraGem(player);
         if (!hasAstra) return;
 
         if (!this.canUsePassives(player)) return;
@@ -675,7 +674,7 @@ implements Listener {
 
         // Check Flux gem in offhand or mainhand
         boolean hasFlux = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.FLUX)
-                        || isHoldingFluxGem(player);
+                || isHoldingFluxGem(player);
         if (!hasFlux) return;
 
         if (!this.canUsePassives(player)) return;
@@ -759,7 +758,7 @@ implements Listener {
 
         // Check Flux gem
         boolean hasFlux = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.FLUX)
-                        || isHoldingFluxGem(player);
+                || isHoldingFluxGem(player);
         if (!hasFlux) return;
 
         if (!this.canUsePassives(player)) return;
@@ -798,7 +797,7 @@ implements Listener {
         if (!(event.getEntity() instanceof LivingEntity)) return;
 
         boolean hasStrength = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.STRENGTH)
-                            || isHoldingStrengthGem(player);
+                || isHoldingStrengthGem(player);
         if (!hasStrength) return;
         if (!this.canUsePassives(player)) return;
 
@@ -828,9 +827,9 @@ implements Listener {
             Particle.DustOptions redDust = new Particle.DustOptions(ParticleUtils.STRENGTH_RED, 1.0f);
             int particleCount = Math.min((int) (bonusDamage * 3), 30);
             target.getWorld().spawnParticle(Particle.DUST, target.getLocation().add(0, 1, 0),
-                particleCount, 0.3, 0.3, 0.3, 0.0, redDust, true);
+                    particleCount, 0.3, 0.3, 0.3, 0.0, redDust, true);
             target.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, target.getLocation().add(0, 1, 0),
-                Math.min((int) (bonusDamage * 2), 15), 0.3, 0.3, 0.3);
+                    Math.min((int) (bonusDamage * 2), 15), 0.3, 0.3, 0.3);
         }
     }
 
@@ -861,7 +860,7 @@ implements Listener {
         LivingEntity target = (LivingEntity) event.getEntity();
 
         boolean hasWealth = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.WEALTH)
-                          || isHoldingWealthGem(player);
+                || isHoldingWealthGem(player);
         if (!hasWealth) return;
         if (!this.canUsePassives(player)) return;
 
@@ -899,7 +898,7 @@ implements Listener {
             // Green particles on target
             Particle.DustOptions greenDust = new Particle.DustOptions(ParticleUtils.WEALTH_GREEN, 1.0f);
             targetPlayer.getWorld().spawnParticle(Particle.DUST, targetPlayer.getLocation().add(0, 1, 0),
-                10, 0.3, 0.3, 0.3, 0.0, greenDust, true);
+                    10, 0.3, 0.3, 0.3, 0.0, greenDust, true);
         }
     }
 
@@ -915,7 +914,7 @@ implements Listener {
         if (event.getEntity() == player) return; // Don't trigger on self-damage
 
         boolean hasWealth = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.WEALTH)
-                          || isHoldingWealthGem(player);
+                || isHoldingWealthGem(player);
         if (!hasWealth) return;
         if (!this.canUsePassives(player)) return;
 
@@ -951,7 +950,7 @@ implements Listener {
             // Subtle green particles on self
             Particle.DustOptions greenDust = new Particle.DustOptions(ParticleUtils.WEALTH_GREEN, 0.8f);
             player.getWorld().spawnParticle(Particle.DUST, player.getLocation().add(0, 1, 0),
-                8, 0.3, 0.3, 0.3, 0.0, greenDust, true);
+                    8, 0.3, 0.3, 0.3, 0.0, greenDust, true);
         }
     }
 
@@ -964,7 +963,7 @@ implements Listener {
         Player player = event.getPlayer();
 
         boolean hasWealth = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.WEALTH)
-                          || isHoldingWealthGem(player);
+                || isHoldingWealthGem(player);
         if (!hasWealth) return;
         if (!this.canUsePassives(player)) return;
 
@@ -1150,7 +1149,7 @@ implements Listener {
         if (!(event.getEntity() instanceof LivingEntity)) return;
 
         boolean hasStrength = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.STRENGTH)
-                            || isHoldingStrengthGem(player);
+                || isHoldingStrengthGem(player);
         if (!hasStrength) return;
         if (!this.canUsePassives(player)) return;
 
@@ -1175,11 +1174,11 @@ implements Listener {
             LivingEntity target = (LivingEntity) event.getEntity();
             Particle.DustOptions redDust = new Particle.DustOptions(ParticleUtils.STRENGTH_RED, 2.0f);
             target.getWorld().spawnParticle(Particle.DUST, target.getLocation().add(0, 1, 0),
-                50, 0.8, 0.8, 0.8, 0.0, redDust, true);
+                    50, 0.8, 0.8, 0.8, 0.0, redDust, true);
             target.getWorld().spawnParticle(Particle.CRIT, target.getLocation().add(0, 1, 0),
-                30, 0.5, 0.5, 0.5, 0.3);
+                    30, 0.5, 0.5, 0.5, 0.3);
             target.getWorld().spawnParticle(Particle.SWEEP_ATTACK, target.getLocation().add(0, 1, 0),
-                10, 0.5, 0.5, 0.5);
+                    10, 0.5, 0.5, 0.5);
             target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 0.7f);
 
             player.sendMessage("\u00a7c\u00a7l\u2694 CHAD STRENGTH! \u00a7c+3.5 hearts bonus damage!");
@@ -1209,16 +1208,16 @@ implements Listener {
 
     private boolean isOreBlock(Material type) {
         return type == Material.COAL_ORE || type == Material.DEEPSLATE_COAL_ORE
-            || type == Material.IRON_ORE || type == Material.DEEPSLATE_IRON_ORE
-            || type == Material.GOLD_ORE || type == Material.DEEPSLATE_GOLD_ORE
-            || type == Material.NETHER_GOLD_ORE
-            || type == Material.COPPER_ORE || type == Material.DEEPSLATE_COPPER_ORE
-            || type == Material.DIAMOND_ORE || type == Material.DEEPSLATE_DIAMOND_ORE
-            || type == Material.EMERALD_ORE || type == Material.DEEPSLATE_EMERALD_ORE
-            || type == Material.LAPIS_ORE || type == Material.DEEPSLATE_LAPIS_ORE
-            || type == Material.REDSTONE_ORE || type == Material.DEEPSLATE_REDSTONE_ORE
-            || type == Material.NETHER_QUARTZ_ORE
-            || type == Material.ANCIENT_DEBRIS;
+                || type == Material.IRON_ORE || type == Material.DEEPSLATE_IRON_ORE
+                || type == Material.GOLD_ORE || type == Material.DEEPSLATE_GOLD_ORE
+                || type == Material.NETHER_GOLD_ORE
+                || type == Material.COPPER_ORE || type == Material.DEEPSLATE_COPPER_ORE
+                || type == Material.DIAMOND_ORE || type == Material.DEEPSLATE_DIAMOND_ORE
+                || type == Material.EMERALD_ORE || type == Material.DEEPSLATE_EMERALD_ORE
+                || type == Material.LAPIS_ORE || type == Material.DEEPSLATE_LAPIS_ORE
+                || type == Material.REDSTONE_ORE || type == Material.DEEPSLATE_REDSTONE_ORE
+                || type == Material.NETHER_QUARTZ_ORE
+                || type == Material.ANCIENT_DEBRIS;
     }
 
     // ==========================================================================
@@ -1235,7 +1234,7 @@ implements Listener {
         // This prevents exploit of duplicating chest contents
         EntityType entityType = event.getEntity().getType();
         if (entityType == EntityType.DONKEY || entityType == EntityType.MULE ||
-            entityType == EntityType.LLAMA || entityType == EntityType.TRADER_LLAMA) {
+                entityType == EntityType.LLAMA || entityType == EntityType.TRADER_LLAMA) {
             return;  // Don't duplicate any drops from chest-bearing entities
         }
 
@@ -1261,19 +1260,19 @@ implements Listener {
 
         // Exclude all armor, weapons, and tools (prevent equipment duping)
         if (type.name().contains("HELMET") || type.name().contains("CHESTPLATE") ||
-            type.name().contains("LEGGINGS") || type.name().contains("BOOTS") ||
-            type.name().contains("SWORD") || type.name().contains("AXE") ||
-            type.name().contains("PICKAXE") || type.name().contains("SHOVEL") ||
-            type.name().contains("HOE") || type.name().contains("BOW") ||
-            type.name().contains("CROSSBOW") || type.name().contains("TRIDENT") ||
-            type.name().contains("SHIELD")) {
+                type.name().contains("LEGGINGS") || type.name().contains("BOOTS") ||
+                type.name().contains("SWORD") || type.name().contains("AXE") ||
+                type.name().contains("PICKAXE") || type.name().contains("SHOVEL") ||
+                type.name().contains("HOE") || type.name().contains("BOW") ||
+                type.name().contains("CROSSBOW") || type.name().contains("TRIDENT") ||
+                type.name().contains("SHIELD")) {
             return false;
         }
 
         // Exclude containers and storage items (prevent shulker/chest duping)
         if (type.name().contains("SHULKER") || type.name().contains("CHEST") ||
-            type.name().contains("BARREL") || type.name().contains("BUNDLE") ||
-            type == Material.SADDLE || type.name().contains("HORSE_ARMOR")) {
+                type.name().contains("BARREL") || type.name().contains("BUNDLE") ||
+                type == Material.SADDLE || type.name().contains("HORSE_ARMOR")) {
             return false;
         }
 
@@ -1288,33 +1287,33 @@ implements Listener {
         // Whitelist: Only duplicate known natural mob drops
         // Using if-else instead of switch to avoid enum constant issues
         if (type == Material.ROTTEN_FLESH || type == Material.BONE || type == Material.SPIDER_EYE ||
-            type == Material.STRING || type == Material.GUNPOWDER || type == Material.ENDER_PEARL ||
-            type == Material.BLAZE_ROD || type == Material.GHAST_TEAR || type == Material.MAGMA_CREAM ||
-            type == Material.SLIME_BALL || type == Material.PRISMARINE_SHARD || type == Material.PRISMARINE_CRYSTALS ||
-            type == Material.RABBIT_HIDE || type == Material.RABBIT_FOOT || type == Material.PHANTOM_MEMBRANE ||
-            type == Material.NAUTILUS_SHELL) {
+                type == Material.STRING || type == Material.GUNPOWDER || type == Material.ENDER_PEARL ||
+                type == Material.BLAZE_ROD || type == Material.GHAST_TEAR || type == Material.MAGMA_CREAM ||
+                type == Material.SLIME_BALL || type == Material.PRISMARINE_SHARD || type == Material.PRISMARINE_CRYSTALS ||
+                type == Material.RABBIT_HIDE || type == Material.RABBIT_FOOT || type == Material.PHANTOM_MEMBRANE ||
+                type == Material.NAUTILUS_SHELL) {
             return true;
         }
         // Raw meat
         if (type == Material.BEEF || type == Material.PORKCHOP || type == Material.MUTTON ||
-            type == Material.CHICKEN || type == Material.RABBIT || type == Material.COD ||
-            type == Material.SALMON || type == Material.TROPICAL_FISH || type == Material.PUFFERFISH) {
+                type == Material.CHICKEN || type == Material.RABBIT || type == Material.COD ||
+                type == Material.SALMON || type == Material.TROPICAL_FISH || type == Material.PUFFERFISH) {
             return true;
         }
         // Cooked meat (from fire damage kills)
         if (type == Material.COOKED_BEEF || type == Material.COOKED_PORKCHOP || type == Material.COOKED_MUTTON ||
-            type == Material.COOKED_CHICKEN || type == Material.COOKED_RABBIT || type == Material.COOKED_COD ||
-            type == Material.COOKED_SALMON) {
+                type == Material.COOKED_CHICKEN || type == Material.COOKED_RABBIT || type == Material.COOKED_COD ||
+                type == Material.COOKED_SALMON) {
             return true;
         }
         // Materials
         if (type == Material.LEATHER || type == Material.FEATHER ||
-            type == Material.INK_SAC || type == Material.GLOW_INK_SAC) {
+                type == Material.INK_SAC || type == Material.GLOW_INK_SAC) {
             return true;
         }
         // Nether
         if (type == Material.NETHER_STAR || type == Material.WITHER_SKELETON_SKULL || type == Material.SKELETON_SKULL ||
-            type == Material.ZOMBIE_HEAD || type == Material.CREEPER_HEAD || type == Material.DRAGON_HEAD) {
+                type == Material.ZOMBIE_HEAD || type == Material.CREEPER_HEAD || type == Material.DRAGON_HEAD) {
             return true;
         }
         // Rare drops
@@ -1355,8 +1354,8 @@ implements Listener {
         }
 
         this.plugin.getFlowStateManager().registerAction(
-            player,
-            dev.xoperr.blissgems.managers.FlowStateManager.ActionType.BLOCK_BREAK
+                player,
+                dev.xoperr.blissgems.managers.FlowStateManager.ActionType.BLOCK_BREAK
         );
     }
 
@@ -1374,8 +1373,8 @@ implements Listener {
         }
 
         this.plugin.getFlowStateManager().registerAction(
-            player,
-            dev.xoperr.blissgems.managers.FlowStateManager.ActionType.ATTACK
+                player,
+                dev.xoperr.blissgems.managers.FlowStateManager.ActionType.ATTACK
         );
     }
 
@@ -1400,8 +1399,8 @@ implements Listener {
         }
 
         this.plugin.getFlowStateManager().registerAction(
-            player,
-            dev.xoperr.blissgems.managers.FlowStateManager.ActionType.ARROW_SHOOT
+                player,
+                dev.xoperr.blissgems.managers.FlowStateManager.ActionType.ARROW_SHOOT
         );
     }
 
@@ -1420,8 +1419,8 @@ implements Listener {
         }
 
         this.plugin.getFlowStateManager().registerAction(
-            player,
-            dev.xoperr.blissgems.managers.FlowStateManager.ActionType.SPRINT
+                player,
+                dev.xoperr.blissgems.managers.FlowStateManager.ActionType.SPRINT
         );
     }
 
@@ -1445,25 +1444,191 @@ implements Listener {
         }
 
         this.plugin.getFlowStateManager().registerAction(
-            player,
-            dev.xoperr.blissgems.managers.FlowStateManager.ActionType.JUMP
+                player,
+                dev.xoperr.blissgems.managers.FlowStateManager.ActionType.JUMP
         );
+    }
+
+    // ==========================================================================
+    // Auratus Gem — Hauling Strike (passive: sneak to grant Haste, reverse KB, shield CD ext)
+    // ==========================================================================
+
+    private boolean isHoldingAuratusGem(Player player) {
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        if (mainHand != null) {
+            String oraxenId = CustomItemManager.getIdByItem(mainHand);
+            if (oraxenId != null && oraxenId.contains("auratus_gem")) return true;
+        }
+        return false;
+    }
+
+    @EventHandler
+    public void onAuratusSneak(PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+        boolean hasAuratus = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.AURATUS)
+                || isHoldingAuratusGem(player);
+        if (!hasAuratus) return;
+        if (!this.canUsePassives(player)) return;
+        this.plugin.getAuratusAbilities().onHaulSneak(player, event.isSneaking());
+    }
+
+    @EventHandler
+    public void onAuratusHaulingStrike(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) return;
+        Player player = (Player) event.getDamager();
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+        LivingEntity victim = (LivingEntity) event.getEntity();
+
+        boolean hasAuratus = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.AURATUS)
+                || isHoldingAuratusGem(player);
+        if (!hasAuratus) return;
+        if (!this.canUsePassives(player)) return;
+
+        // Angel's Grasp pull chance
+        this.plugin.getAuratusAbilities().tryAngelsGrasp(player, victim.getLocation());
+        // Hauling Strike (reverse KB + shield CD extension when crouching)
+        this.plugin.getAuratusAbilities().applyHaulingStrike(player, victim);
+    }
+
+    @EventHandler
+    public void onAuratusParryHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player victim = (Player) event.getEntity();
+        if (!this.plugin.getAuratusAbilities().isParrying(victim)) return;
+
+        Entity damager = event.getDamager();
+        boolean cancelled = this.plugin.getAuratusAbilities().handleParry(victim, damager, event.getDamage());
+        if (cancelled) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onAuratusParryPotion(org.bukkit.event.entity.PotionSplashEvent event) {
+        // Check if the potion was thrown at a parrying player and redirect it
+        if (!(event.getPotion() instanceof org.bukkit.entity.ThrownPotion)) return;
+        org.bukkit.entity.ThrownPotion potion = (org.bukkit.entity.ThrownPotion) event.getPotion();
+
+        for (LivingEntity affected : event.getAffectedEntities()) {
+            if (!(affected instanceof Player)) continue;
+            Player p = (Player) affected;
+            if (!this.plugin.getAuratusAbilities().isParrying(p)) continue;
+            this.plugin.getAuratusAbilities().handleParryPotion(p, potion);
+            event.setIntensity(affected, 0); // cancel effect on the parrying player
+        }
+    }
+
+    @EventHandler
+    public void onAuratusFeatheredFall(EntityDamageEvent event) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+
+        boolean hasAuratus = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.AURATUS)
+                || isHoldingAuratusGem(player);
+        if (!hasAuratus) return;
+        if (!this.canUsePassives(player)) return;
+
+        // Feathered Fall: greatly reduce fall damage
+        double reduction = this.plugin.getConfig().getDouble("passives.auratus.feathered-fall.reduction", 0.7);
+        event.setDamage(event.getDamage() * (1.0 - reduction));
+    }
+
+    @EventHandler
+    public void onAuratusDivinePurity(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+
+        boolean hasAuratus = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.AURATUS)
+                || isHoldingAuratusGem(player);
+        if (!hasAuratus) return;
+        if (!this.canUsePassives(player)) return;
+        if (!this.plugin.getConfig().getBoolean("passives.auratus.divine-purity.enabled", true)) return;
+
+        // Remove negative effects when hit
+        for (PotionEffectType bad : new PotionEffectType[]{
+                PotionEffectType.WITHER, PotionEffectType.WEAKNESS,
+                PotionEffectType.BLINDNESS, PotionEffectType.POISON,
+                PotionEffectType.SLOWNESS, PotionEffectType.MINING_FATIGUE}) {
+            player.removePotionEffect(bad);
+        }
+    }
+
+    // ==========================================================================
+    // Heretic Gem — Auto-Crit (passive: always critically strike)
+    // ==========================================================================
+
+    private boolean isHoldingHereticGem(Player player) {
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        if (mainHand != null) {
+            String oraxenId = CustomItemManager.getIdByItem(mainHand);
+            if (oraxenId != null && oraxenId.contains("heretic_gem")) return true;
+        }
+        return false;
+    }
+
+    @EventHandler
+    public void onHereticAutoCrit(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) return;
+        Player player = (Player) event.getDamager();
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+
+        boolean hasHeretic = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.HERETIC)
+                || isHoldingHereticGem(player);
+        if (!hasHeretic) return;
+        if (!this.canUsePassives(player)) return;
+
+        // Auto-Crit: multiply damage by crit multiplier regardless of movement
+        double critMult = this.plugin.getConfig().getDouble("passives.heretic.auto-crit.multiplier", 1.5);
+        event.setDamage(event.getDamage() * critMult);
+
+        // Crit particles
+        LivingEntity target = (LivingEntity) event.getEntity();
+        target.getWorld().spawnParticle(Particle.CRIT, target.getLocation().add(0, 1, 0),
+                20, 0.4, 0.4, 0.4, 0.2);
+    }
+
+    @EventHandler
+    public void onHereticBleedingAmplification(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+        LivingEntity victim = (LivingEntity) event.getEntity();
+        if (!this.plugin.getHereticAbilities().isBleeding(victim)) return;
+
+        double modified = this.plugin.getHereticAbilities().applyBleedingAmplification(victim, event.getDamage());
+        event.setDamage(modified);
+    }
+
+    @EventHandler
+    public void onHereticBloodlinkDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player victim = (Player) event.getEntity();
+        if (!this.plugin.getHereticAbilities().isBloodlinked(victim)) return;
+
+        // Mirror damage to bloodlink partner
+        this.plugin.getHereticAbilities().handleBloodlinkDamage(victim, event.getDamage());
+    }
+
+    @EventHandler
+    public void onHereticHemorrhage(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        boolean hasHeretic = this.plugin.getGemManager().hasGemTypeInOffhand(player, GemType.HERETIC)
+                || isHoldingHereticGem(player);
+        if (!hasHeretic) return;
+        if (!this.canUsePassives(player)) return;
+
+        // Schedule for next tick so the potion effect is already applied
+        ItemStack item = event.getItem();
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                this.plugin.getHereticAbilities().applyHemorrhage(player, effect);
+            }
+        }, 1L);
     }
 
     /**
      * Check if passives are allowed for this player (energy + region check)
      */
     private boolean canUsePassives(Player player) {
-        // Energy check
-        if (!plugin.getEnergyManager().arePassivesActive(player)) {
-            return false;
-        }
-        // Region check (WorldGuard integration)
-        if (plugin.getRegionManager() != null &&
-            plugin.getRegionManager().areGemsDisabled(player)) {
-            return false;
-        }
+        if (!plugin.getEnergyManager().arePassivesActive(player)) return false;
+        if (plugin.getRegionManager() != null && plugin.getRegionManager().areGemsDisabled(player)) return false;
         return true;
     }
 }
-

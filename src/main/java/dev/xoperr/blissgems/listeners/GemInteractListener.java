@@ -56,7 +56,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 public class GemInteractListener
-implements Listener {
+        implements Listener {
     private final BlissGems plugin;
     private final Map<UUID, Long> traderCooldowns;
     private final Map<UUID, Long> clickDisabledMessageCooldowns = new HashMap<>();
@@ -92,9 +92,9 @@ implements Listener {
 
         // Block ANY right-click interaction if gem and bundle are in either hand
         if ((hasGemInMainHand && hasBundleInOffHand) ||
-            (hasGemInOffHand && hasBundleInMainHand) ||
-            (hasGemInMainHand && item != null && item.getType() == Material.BUNDLE) ||
-            (hasGemInOffHand && item != null && item.getType() == Material.BUNDLE)) {
+                (hasGemInOffHand && hasBundleInMainHand) ||
+                (hasGemInMainHand && item != null && item.getType() == Material.BUNDLE) ||
+                (hasGemInOffHand && item != null && item.getType() == Material.BUNDLE)) {
             event.setCancelled(true);
             String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-bundle");
             if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
@@ -177,8 +177,16 @@ implements Listener {
         if (gemType != null) {
             switch (gemType) {
                 case ASTRA: this.plugin.getAstraAbilities().onRightClick(player, tier); return;
+                case AURATUS:
+                    if (player.isSneaking()) this.plugin.getAuratusAbilities().onSecondary(player, tier);
+                    else this.plugin.getAuratusAbilities().onPrimary(player, tier);
+                    return;
                 case FIRE: this.plugin.getFireAbilities().onRightClick(player, tier); return;
                 case FLUX: this.plugin.getFluxAbilities().onRightClick(player, tier); return;
+                case HERETIC:
+                    if (player.isSneaking()) this.plugin.getHereticAbilities().onSecondary(player, tier);
+                    else this.plugin.getHereticAbilities().onPrimary(player, tier);
+                    return;
                 case LIFE: this.plugin.getLifeAbilities().onRightClick(player, tier); return;
                 case PUFF: this.plugin.getPuffAbilities().onRightClick(player, tier); return;
                 case SPEED: this.plugin.getSpeedAbilities().onRightClick(player, tier); return;
@@ -371,7 +379,7 @@ implements Listener {
 
             // Check if player has an open inventory that is NOT their own
             boolean hasContainerOpen = event.getView().getTopInventory() != null
-                && event.getView().getTopInventory().getHolder() != player;
+                    && event.getView().getTopInventory().getHolder() != player;
 
             // If a container is open, block ALL gem movements into it
             if (hasContainerOpen) {
@@ -383,7 +391,7 @@ implements Listener {
                         if (offhandOraxenId != null && GemType.isGem(offhandOraxenId)) {
                             event.setCancelled(true);
                             String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-container");
-                        if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+                            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
                             return;
                         }
                     }
@@ -452,7 +460,7 @@ implements Listener {
                     if (cursorId != null && GemType.isGem(cursorId)) {
                         event.setCancelled(true);
                         String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-bundle");
-            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+                        if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
                         return;
                     }
                 }
@@ -463,7 +471,7 @@ implements Listener {
                     if (cursorItem != null && cursorItem.getType() == Material.BUNDLE) {
                         event.setCancelled(true);
                         String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-bundle");
-            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+                        if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
                         return;
                     }
                 }
@@ -485,14 +493,14 @@ implements Listener {
                 if (hotbarItem.getType() == Material.BUNDLE && hasGemInInventory) {
                     event.setCancelled(true);
                     String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-bundle");
-            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+                    if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
                     return;
                 }
                 String hotbarId = CustomItemManager.getIdByItem(hotbarItem);
                 if (hotbarId != null && GemType.isGem(hotbarId) && hasBundleInInventory) {
                     event.setCancelled(true);
                     String msg = plugin.getConfigManager().getFormattedMessage("cannot-store-gem-bundle");
-            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+                    if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
                     return;
                 }
             }
@@ -691,13 +699,13 @@ implements Listener {
 
         // Check if placing gem in item frame or giving to Allay
         if (event.getRightClicked() instanceof ItemFrame ||
-            event.getRightClicked() instanceof org.bukkit.entity.Allay) {
+                event.getRightClicked() instanceof org.bukkit.entity.Allay) {
             // Check both mainhand and offhand for gems
             String mainHandId = CustomItemManager.getIdByItem(mainHand);
             String offHandId = CustomItemManager.getIdByItem(offHand);
 
             if ((mainHandId != null && GemType.isGem(mainHandId)) ||
-                (offHandId != null && GemType.isGem(offHandId))) {
+                    (offHandId != null && GemType.isGem(offHandId))) {
                 event.setCancelled(true);
                 String msg = plugin.getConfigManager().getFormattedMessage("cannot-place-gem-itemframe");
                 if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
@@ -914,12 +922,12 @@ implements Listener {
 
         String oraxenId = CustomItemManager.getIdByItem(mainHand);
         boolean isGemItem = oraxenId != null && (GemType.isGem(oraxenId) ||
-            (plugin.getGemRegistry() != null && plugin.getGemRegistry().isRegisteredGem(oraxenId)));
+                (plugin.getGemRegistry() != null && plugin.getGemRegistry().isRegisteredGem(oraxenId)));
         if (!isGemItem) {
             // Try offhand
             oraxenId = CustomItemManager.getIdByItem(offHand);
             isGemItem = oraxenId != null && (GemType.isGem(oraxenId) ||
-                (plugin.getGemRegistry() != null && plugin.getGemRegistry().isRegisteredGem(oraxenId)));
+                    (plugin.getGemRegistry() != null && plugin.getGemRegistry().isRegisteredGem(oraxenId)));
             if (!isGemItem) {
                 player.sendMessage("\u00a7c\u00a7lYou must be holding a gem to use this command!");
                 return;
@@ -956,8 +964,16 @@ implements Listener {
             }
             switch (gemType) {
                 case ASTRA: this.plugin.getAstraAbilities().onRightClick(player, tier); break;
+                case AURATUS:
+                    if (player.isSneaking()) this.plugin.getAuratusAbilities().onSecondary(player, tier);
+                    else this.plugin.getAuratusAbilities().onPrimary(player, tier);
+                    break;
                 case FIRE: this.plugin.getFireAbilities().onRightClick(player, tier); break;
                 case FLUX: this.plugin.getFluxAbilities().onRightClick(player, tier); break;
+                case HERETIC:
+                    if (player.isSneaking()) this.plugin.getHereticAbilities().onSecondary(player, tier);
+                    else this.plugin.getHereticAbilities().onPrimary(player, tier);
+                    break;
                 case LIFE: this.plugin.getLifeAbilities().onRightClick(player, tier); break;
                 case PUFF: this.plugin.getPuffAbilities().onRightClick(player, tier); break;
                 case SPEED: this.plugin.getSpeedAbilities().onRightClick(player, tier); break;
@@ -980,4 +996,3 @@ implements Listener {
         }
     }
 }
-

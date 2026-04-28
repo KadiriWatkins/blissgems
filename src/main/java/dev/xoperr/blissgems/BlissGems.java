@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.152.
- * 
+ *
  * Could not load the following classes:
  *  org.bukkit.command.CommandExecutor
  *  org.bukkit.command.TabCompleter
@@ -11,6 +11,8 @@
 package dev.xoperr.blissgems;
 
 import dev.xoperr.blissgems.abilities.AstraAbilities;
+import dev.xoperr.blissgems.abilities.AuratusAbilities;
+import dev.xoperr.blissgems.abilities.HereticAbilities;
 import dev.xoperr.blissgems.abilities.FireAbilities;
 import dev.xoperr.blissgems.abilities.FluxAbilities;
 import dev.xoperr.blissgems.abilities.LifeAbilities;
@@ -82,8 +84,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BlissGems
-extends JavaPlugin
-implements BlissGemsAPI {
+        extends JavaPlugin
+        implements BlissGemsAPI {
     private ConfigManager configManager;
     private BlissCommand blissCommand;
     private GemRegistryImpl gemRegistry;
@@ -104,6 +106,8 @@ implements BlissGemsAPI {
     private CriticalHitManager criticalHitManager;
     private PluginMessagingManager pluginMessagingManager;
     private AstraAbilities astraAbilities;
+    private AuratusAbilities auratusAbilities;
+    private HereticAbilities hereticAbilities;
     private FireAbilities fireAbilities;
     private FluxAbilities fluxAbilities;
     private LifeAbilities lifeAbilities;
@@ -280,6 +284,20 @@ implements BlissGemsAPI {
             e.printStackTrace();
         }
         try {
+            this.auratusAbilities = new AuratusAbilities(this);
+        } catch (Exception e) {
+            this.getLogger().severe("=== BLISSGEMS FAILED TO INITIALIZE: AuratusAbilities ===");
+            this.getLogger().severe(e.getMessage());
+            e.printStackTrace();
+        }
+        try {
+            this.hereticAbilities = new HereticAbilities(this);
+        } catch (Exception e) {
+            this.getLogger().severe("=== BLISSGEMS FAILED TO INITIALIZE: HereticAbilities ===");
+            this.getLogger().severe(e.getMessage());
+            e.printStackTrace();
+        }
+        try {
             this.fireAbilities = new FireAbilities(this);
         } catch (Exception e) {
             this.getLogger().severe("=== BLISSGEMS FAILED TO INITIALIZE: FireAbilities ===");
@@ -333,7 +351,7 @@ implements BlissGemsAPI {
             this.gemRegistry = new GemRegistryImpl(this);
             this.registerBuiltInGems();
             this.getServer().getServicesManager().register(
-                BlissGemsAPI.class, this, this, ServicePriority.Normal);
+                    BlissGemsAPI.class, this, this, ServicePriority.Normal);
             this.getLogger().info("BlissGems Addon API registered via ServicesManager");
         } catch (Exception e) {
             this.getLogger().severe("=== BLISSGEMS FAILED TO INITIALIZE: GemRegistry/API ===");
@@ -416,15 +434,15 @@ implements BlissGemsAPI {
         if (this.getConfig().getBoolean("send-anonymous-metrics", true)) {
             try {
                 this.metrics = BukkitMetrics.factory()
-                    .token("33b82f6ed2f61ee4be22345da22fbf24")
-                    .addMetric(Metric.number("active_gem_players", () -> {
-                        int count = 0;
-                        for (org.bukkit.entity.Player p : getServer().getOnlinePlayers()) {
-                            if (gemManager != null && gemManager.hasGemInOffhand(p)) count++;
-                        }
-                        return count;
-                    }))
-                    .create(this);
+                        .token("33b82f6ed2f61ee4be22345da22fbf24")
+                        .addMetric(Metric.number("active_gem_players", () -> {
+                            int count = 0;
+                            for (org.bukkit.entity.Player p : getServer().getOnlinePlayers()) {
+                                if (gemManager != null && gemManager.hasGemInOffhand(p)) count++;
+                            }
+                            return count;
+                        }))
+                        .create(this);
                 this.metrics.ready();
             } catch (Exception e) {
                 this.getLogger().warning("FastStats metrics failed to initialize: " + e.getMessage());
@@ -468,6 +486,12 @@ implements BlissGemsAPI {
         for (org.bukkit.entity.Player player : org.bukkit.Bukkit.getOnlinePlayers()) {
             if (this.astraAbilities != null) {
                 this.astraAbilities.cleanup(player);
+            }
+            if (this.auratusAbilities != null) {
+                this.auratusAbilities.cleanup(player);
+            }
+            if (this.hereticAbilities != null) {
+                this.hereticAbilities.cleanup(player);
             }
             if (this.fireAbilities != null) {
                 this.fireAbilities.cleanup(player);
@@ -516,7 +540,7 @@ implements BlissGemsAPI {
 
         for (java.io.File file : files) {
             org.bukkit.configuration.file.FileConfiguration data =
-                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
+                    org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file);
             if (data.getBoolean("received-first-gem", false)) {
                 count++;
                 if (count >= threshold) {
@@ -591,6 +615,14 @@ implements BlissGemsAPI {
 
     public AstraAbilities getAstraAbilities() {
         return this.astraAbilities;
+    }
+
+    public AuratusAbilities getAuratusAbilities() {
+        return this.auratusAbilities;
+    }
+
+    public HereticAbilities getHereticAbilities() {
+        return this.hereticAbilities;
     }
 
     public FireAbilities getFireAbilities() {
@@ -710,17 +742,19 @@ implements BlissGemsAPI {
         // Register gem definitions
         for (dev.xoperr.blissgems.utils.GemType type : dev.xoperr.blissgems.utils.GemType.values()) {
             GemDefinition def = new GemDefinition.Builder(type.getId())
-                .displayName(type.getDisplayName())
-                .description(type.getDescription())
-                .color(type.getColor())
-                .plugin("BlissGems")
-                .maxTier(2)
-                .build();
+                    .displayName(type.getDisplayName())
+                    .description(type.getDescription())
+                    .color(type.getColor())
+                    .plugin("BlissGems")
+                    .maxTier(2)
+                    .build();
             this.gemRegistry.registerGem(def);
         }
 
         // Register ability handlers (each ability class now implements GemAbilityHandler)
         if (this.astraAbilities != null) this.gemRegistry.registerAbilities("astra", this.astraAbilities);
+        if (this.auratusAbilities != null) this.gemRegistry.registerAbilities("auratus", this.auratusAbilities);
+        if (this.hereticAbilities != null) this.gemRegistry.registerAbilities("heretic", this.hereticAbilities);
         if (this.fireAbilities != null) this.gemRegistry.registerAbilities("fire", this.fireAbilities);
         if (this.fluxAbilities != null) this.gemRegistry.registerAbilities("flux", this.fluxAbilities);
         if (this.lifeAbilities != null) this.gemRegistry.registerAbilities("life", this.lifeAbilities);
@@ -736,48 +770,55 @@ implements BlissGemsAPI {
 
         // Register cooldown display entries
         this.gemRegistry.registerCooldowns("astra", List.of(
-            new CooldownEntry("astra-daggers", "Daggers"),
-            new CooldownEntry("astra-projection", "Projection")
+                new CooldownEntry("astra-daggers", "Daggers"),
+                new CooldownEntry("astra-projection", "Projection")
+        ));
+        this.gemRegistry.registerCooldowns("auratus", List.of(
+                new CooldownEntry("auratus-venerated-perforators", "Chains"),
+                new CooldownEntry("auratus-echoing-aegis", "Aegis")
+        ));
+        this.gemRegistry.registerCooldowns("heretic", List.of(
+                new CooldownEntry("heretic-bloodsaws", "Bloodsaws"),
+                new CooldownEntry("heretic-bloodlinking", "Bloodlink")
         ));
         this.gemRegistry.registerCooldowns("fire", List.of(
-            new CooldownEntry("fire-fireball", "Fireball"),
-            new CooldownEntry("fire-campfire", "Campfire"),
-            new CooldownEntry("fire-crisp", "Crisp"),
-            new CooldownEntry("fire-meteor-shower", "Meteor")
+                new CooldownEntry("fire-fireball", "Fireball"),
+                new CooldownEntry("fire-campfire", "Campfire"),
+                new CooldownEntry("fire-crisp", "Crisp"),
+                new CooldownEntry("fire-meteor-shower", "Meteor")
         ));
         this.gemRegistry.registerCooldowns("flux", List.of(
-            new CooldownEntry("flux-beam", "Beam"),
-            new CooldownEntry("flux-ground", "Ground"),
-            new CooldownEntry("flux-flashbang", "Flash"),
-            new CooldownEntry("flux-kinetic-burst", "Kinetic")
+                new CooldownEntry("flux-beam", "Beam"),
+                new CooldownEntry("flux-ground", "Ground"),
+                new CooldownEntry("flux-flashbang", "Flash"),
+                new CooldownEntry("flux-kinetic-burst", "Kinetic")
         ));
         this.gemRegistry.registerCooldowns("life", List.of(
-            new CooldownEntry("life-drainer", "Drainer"),
-            new CooldownEntry("life-circle-of-life", "Circle"),
-            new CooldownEntry("life-vitality-vortex", "Vortex"),
-            new CooldownEntry("life-heart-lock", "Lock")
+                new CooldownEntry("life-drainer", "Drainer"),
+                new CooldownEntry("life-circle-of-life", "Circle"),
+                new CooldownEntry("life-vitality-vortex", "Vortex"),
+                new CooldownEntry("life-heart-lock", "Lock")
         ));
         this.gemRegistry.registerCooldowns("puff", List.of(
-            new CooldownEntry("puff-dash", "Dash"),
-            new CooldownEntry("puff-breezy-bash", "Bash"),
-            new CooldownEntry("puff-group-bash", "Group")
+                new CooldownEntry("puff-dash", "Dash"),
+                new CooldownEntry("puff-breezy-bash", "Bash"),
+                new CooldownEntry("puff-group-bash", "Group")
         ));
         this.gemRegistry.registerCooldowns("speed", List.of(
-            new CooldownEntry("speed-blur", "Blur"),
-            new CooldownEntry("speed-storm", "Storm"),
-            new CooldownEntry("speed-terminal", "Terminal")
+                new CooldownEntry("speed-blur", "Blur"),
+                new CooldownEntry("speed-storm", "Storm"),
+                new CooldownEntry("speed-terminal", "Terminal")
         ));
         this.gemRegistry.registerCooldowns("strength", List.of(
-            new CooldownEntry("strength-nullify", "Nullify"),
-            new CooldownEntry("strength-frailer", "Frailer"),
-            new CooldownEntry("strength-shadow-stalker", "Stalker")
+                new CooldownEntry("strength-nullify", "Nullify"),
+                new CooldownEntry("strength-frailer", "Frailer"),
+                new CooldownEntry("strength-shadow-stalker", "Stalker")
         ));
         this.gemRegistry.registerCooldowns("wealth", List.of(
-            new CooldownEntry("wealth-unfortunate", "Unfortunate"),
-            new CooldownEntry("wealth-rich-rush", "Rush"),
-            new CooldownEntry("wealth-item-lock", "Lock"),
-            new CooldownEntry("wealth-amplification", "Amplify")
+                new CooldownEntry("wealth-unfortunate", "Unfortunate"),
+                new CooldownEntry("wealth-rich-rush", "Rush"),
+                new CooldownEntry("wealth-item-lock", "Lock"),
+                new CooldownEntry("wealth-amplification", "Amplify")
         ));
     }
 }
-
