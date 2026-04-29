@@ -34,8 +34,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class BlissCommand
-implements CommandExecutor,
-TabCompleter {
+        implements CommandExecutor,
+        TabCompleter {
     private final BlissGems plugin;
 
     public BlissCommand(BlissGems plugin) {
@@ -199,6 +199,11 @@ TabCompleter {
                 sender.sendMessage(this.plugin.getConfigManager().getFormattedMessage("invalid-tier", new Object[0]));
                 return;
             }
+        } else {
+            // Auratus and Heretic have no meaningful Tier 1 — default to T2
+            if (gemType == GemType.AURATUS || gemType == GemType.HERETIC) {
+                tier = 2;
+            }
         }
         // Remove old gem(s) from inventory first
         for (int i = 0; i < target.getInventory().getSize(); i++) {
@@ -249,7 +254,7 @@ TabCompleter {
         // Select random gem
         GemType randomGem = enabledGems.get(new java.util.Random().nextInt(enabledGems.size()));
 
-        // Get tier (default to 1)
+        // Get tier (default to 1, but auratus/heretic always T2)
         int tier = 1;
         if (args.length >= 3) {
             try {
@@ -263,6 +268,10 @@ TabCompleter {
                 sender.sendMessage(this.plugin.getConfigManager().getFormattedMessage("invalid-tier", new Object[0]));
                 return;
             }
+        }
+        // Auratus and Heretic have no meaningful Tier 1 — force T2
+        if (randomGem == GemType.AURATUS || randomGem == GemType.HERETIC) {
+            tier = 2;
         }
 
         // Remove old gem(s) from inventory first
@@ -378,9 +387,9 @@ TabCompleter {
 
             this.plugin.getConfigManager().sendFormattedMessage(player, "energy-info-header");
             this.plugin.getConfigManager().sendFormattedMessage(player, "energy-info-line1",
-                "energyBar", energyBar, "energy", energy);
+                    "energyBar", energyBar, "energy", energy);
             this.plugin.getConfigManager().sendFormattedMessage(player, "energy-info-line2",
-                "state", state.getDisplayName());
+                    "state", state.getDisplayName());
             return;
         }
 
@@ -609,8 +618,10 @@ TabCompleter {
         if (gemType != null) {
             switch (gemType) {
                 case ASTRA: this.plugin.getAstraAbilities().astralDaggers(player); break;
+                case AURATUS: this.plugin.getAuratusAbilities().onPrimary(player, tier); break;
                 case FIRE: this.plugin.getFireAbilities().chargedFireball(player); break;
                 case FLUX: this.plugin.getFluxAbilities().ground(player); break;
+                case HERETIC: this.plugin.getHereticAbilities().onPrimary(player, tier); break;
                 case LIFE: this.plugin.getLifeAbilities().heartDrainer(player); break;
                 case PUFF: this.plugin.getPuffAbilities().dash(player); break;
                 case SPEED: this.plugin.getSpeedAbilities().onRightClick(player, tier); break;
@@ -660,11 +671,22 @@ TabCompleter {
         }
 
         GemType gemType = GemType.fromOraxenId(oraxenId);
+
+        // Auratus and Heretic are always T2 — skip the tier check for them
+        boolean skipTierCheck = gemType == GemType.AURATUS || gemType == GemType.HERETIC;
+        if (tier < 2 && !skipTierCheck) {
+            String msg = this.plugin.getConfigManager().getFormattedMessage("requires-tier2");
+            if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
+            return;
+        }
+
         if (gemType != null) {
             switch (gemType) {
                 case ASTRA: this.plugin.getAstraAbilities().astralProjection(player); break;
+                case AURATUS: this.plugin.getAuratusAbilities().onSecondary(player, tier); break;
                 case FIRE: this.plugin.getFireAbilities().cozyCampfire(player); break;
                 case FLUX: this.plugin.getFluxAbilities().ground(player); break;
+                case HERETIC: this.plugin.getHereticAbilities().onSecondary(player, tier); break;
                 case LIFE: this.plugin.getLifeAbilities().circleOfLife(player); break;
                 case PUFF: this.plugin.getPuffAbilities().breezyBash(player); break;
                 case SPEED: this.plugin.getSpeedAbilities().speedStorm(player); break;
@@ -1058,6 +1080,7 @@ TabCompleter {
                 GemType randomGem = getRandomEnabledGem();
                 if (randomGem != null) {
                     final GemType finalGem = randomGem;
+                    final int finalTier = (randomGem == GemType.AURATUS || randomGem == GemType.HERETIC) ? 2 : 1;
                     final Player target = online;
 
                     // Welcome messages
@@ -1071,15 +1094,15 @@ TabCompleter {
                     target.sendMessage("");
 
                     // Start the ritual animation
-                    this.plugin.getGemRitualManager().performGemRitual(target, finalGem, true, 1);
+                    this.plugin.getGemRitualManager().performGemRitual(target, finalGem, true, finalTier);
 
                     // Give the gem after a short delay (let ritual build up)
                     this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                        if (target.isOnline() && this.plugin.getGemManager().giveGem(target, finalGem, 1)) {
+                        if (target.isOnline() && this.plugin.getGemManager().giveGem(target, finalGem, finalTier)) {
                             markFirstGemReceived(target);
 
                             String welcomeMsg = this.plugin.getConfigManager().getFormattedMessage("first-gem-received",
-                                "gem", finalGem.getDisplayName());
+                                    "gem", finalGem.getDisplayName());
                             if (welcomeMsg != null && !welcomeMsg.isEmpty()) {
                                 target.sendMessage(welcomeMsg);
                             } else {
@@ -1247,4 +1270,3 @@ TabCompleter {
         return completions.stream().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
     }
 }
-

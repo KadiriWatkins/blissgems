@@ -5,71 +5,76 @@
 # ENERGY SYSTEM
 # ==========================================
 energy:
-  # Energy gained on player kill
   gain-on-kill: 1
-  # Energy lost on death
   loss-on-death: 1
-  # Maximum energy level
   max-energy: 10
-  # Starting energy for pristine gems
   starting-energy: 10
-  # Energy at which passives stop working (Ruined state)
   ruined-threshold: 1
-  # Energy at which abilities cannot be used (Broken state)
   broken-threshold: 0
 
 # ==========================================
 # GEM SETTINGS
 # ==========================================
 gems:
-  # Enable/disable specific gem types
   enabled:
     astra: true
+    auratus: true
     fire: true
     flux: true
+    heretic: true
     life: true
     puff: true
     speed: true
     strength: true
     wealth: true
 
-  # Only one gem can be active at a time
   single-gem-only: true
-
-  # Prevent players from dropping gems
   prevent-drop: true
 
 # ==========================================
 # REVIVE BEACON SETTINGS
 # ==========================================
 revive-beacon:
-  # Duration of the revive beacon in seconds
   duration: 300
-  # Range in blocks
   range: 10.0
-  # Health to revive with (as fraction of max health, 0.5 = 50%)
   revive-health: 10.0
-  # Energy to restore if player hit 0 energy
   restore-energy: 3
 
 # ==========================================
 # PASSIVE EFFECTS
 # ==========================================
 passives:
-  # How often to apply passive effects (in ticks, 20 ticks = 1 second)
   update-interval: 20
 
   astra:
-    phase-chance: 0.15  # 15% chance to phase through attacks
+    phase-chance: 0.15
+
+  auratus:
+    divine-purity:
+      enabled: true
+    angels-grasp:
+      mode: pull           # "pull" or "durability"
+      pull-chance: 0.05
+      pull-radius: 4.0
+    feathered-fall:
+      reduction: 0.7       # 70% fall damage reduction
+    hauling-strike:
+      shield-cd-extension: 40
+
+  heretic:
+    auto-crit:
+      multiplier: 1.5
+    hemorrhage:
+      max-duration-ticks: 9600  # 8 minutes
 
   life:
-    heal-amount: 0.5  # Hearts healed every 5 seconds
-    heal-interval: 100  # Ticks between heals (5 seconds)
+    heal-amount: 0.5
+    heal-interval: 100
     undead-damage-multiplier: 3.0
     saturation-multiplier: 2.0
 
   flux:
-    flow-state-speed-boost: 0.2  # Additional speed in water
+    flow-state-speed-boost: 0.2
 
   puff:
     double-jump-enabled: true
@@ -81,54 +86,53 @@ passives:
 # ABILITIES
 # ==========================================
 abilities:
-  # Global ability cooldown (in seconds)
   global-cooldown: 1
 
-  # Specific ability cooldowns (in seconds)
   cooldowns:
     astra-daggers: 20
-    astra-projection: 60  # Astral Projection cooldown
+    astra-projection: 60
+    auratus-venerated-perforators: 12
+    auratus-echoing-aegis: 18
     fire-fireball: 90
     fire-campfire: 120
     flux-ground: 90
     flux-ray: 120
     flux-shocking-arrows: 8
+    heretic-bloodsaws: 8
+    heretic-bloodlinking: 25
     life-heart-drainer: 45
     life-circle-of-life: 90
     puff-dash: 8
     puff-breezy-bash: 15
     speed-sedative: 50
     speed-storm: 60
-    speed-terminal: 45  # Terminal Velocity (Tier 2 secondary ability)
-    speed-blur: 15  # Blur ability cooldown
+    speed-terminal: 45
+    speed-blur: 15
     strength-nullify: 30
     strength-frailer: 45
     strength-shadow-stalker: 120
     wealth-durability-chip: 40
-    wealth-pockets: 0  # No cooldown for opening
+    wealth-pockets: 0
     wealth-unfortunate: 60
-    wealth-rich-rush: 540  # 9 minutes
-    wealth-amplification: 180  # 3 minutes
+    wealth-rich-rush: 540
+    wealth-amplification: 180
 
-  # Ability damage values
   damage:
     astra-daggers: 4.0
     fire-fireball: 6.0
     fire-campfire: 2.0
     flux-shocking: 3.0
-    life-drainer: 4.0  # Total over 20 seconds
+    life-drainer: 4.0
     puff-dash: 2.0
     strength-chad-bonus: 7.0
 
-  # Fire campfire settings
   fire-campfire:
     radius: 5.0
-    burn-duration: 3  # seconds enemies burn
+    burn-duration: 3
 
-  # Ability durations (in seconds)
   durations:
     flux-ground-freeze: 5
-    flux-ray: 8  # Duration of Flux Ray laser (7-10 seconds recommended)
+    flux-ray: 8
     astra-projection: 10
     fire-campfire: 60
     life-drainer: 20
@@ -137,16 +141,49 @@ abilities:
     wealth-rich-rush: 120
     wealth-amplification: 45
 
-  # Astra projection settings
   astra-projection:
-    radius: 150.0  # Maximum distance from origin point
+    radius: 150.0
+
+  # Auratus ability settings
+  auratus-venerated-perforators:
+    chain-speed: 2.0
+    slam-radius: 5.0
+    slam-damage: 6.0
+    wind-disable-radius: 3.0
+
+  auratus-echoing-aegis:
+    parry-ticks: 12
+    weapon-drain: 15
+    heal-min: 4.0
+    heal-max: 6.0
+    speed-duration-ticks: 80
+    weaving-duration-ticks: 60
+
+  # Heretic ability settings
+  heretic-bloodsaws:
+    pass-through-damage: 3.0
+    spore-radius: 5.0
+    spore-duration-ticks: 100
+    bleed-amplifier: 1.35
+
+  heretic-bloodlinking:
+    leap-velocity: 1.6
+    slam-velocity: -2.8
+    apex-ticks: 14
+    aoe-radius: 4.0
+    impact-damage: 5.0
+    link-duration-ticks: 200
+    mirror-ratio: 0.75
+
+  # Flux conduction settings
+  flux-conduction:
+    range: 10
 
 # ==========================================
 # AUTO-ENCHANTING (TIER 2 ONLY)
 # ==========================================
 auto-enchant:
   enabled: true
-  # Enchantments are applied when holding appropriate tools
   fire:
     flame: true
     fire-aspect: true
@@ -167,12 +204,9 @@ auto-enchant:
 # UPGRADER SYSTEM
 # ==========================================
 upgrader:
-  # Play effects on upgrade
   play-effects: true
-  # Particle effect type
   particle: ENCHANT
   particle-count: 50
-  # Sound effect
   sound: ENTITY_PLAYER_LEVELUP
   sound-volume: 1.0
   sound-pitch: 1.5
@@ -181,9 +215,7 @@ upgrader:
 # TRADER SYSTEM
 # ==========================================
 trader:
-  # Cooldown in seconds
   cooldown: 5
-  # Play effects on trade
   play-effects: true
   particle: PORTAL
   particle-count: 30
@@ -193,9 +225,7 @@ trader:
 # ENERGY BOTTLE
 # ==========================================
 energy-bottle:
-  # Drop chance when Pristine +5 player kills another player
   drop-enabled: true
-  # Play effects on absorption
   play-effects: true
   particle: HEART
   particle-count: 20
@@ -205,17 +235,11 @@ energy-bottle:
 # REPAIR KIT / PEDESTAL
 # ==========================================
 repair-kit:
-  # Energy restored per second (set to 10 for instant full restore)
   energy-per-second: 10
-  # Maximum total energy a kit can restore
   max-total-energy: 10
-  # Range to heal nearby players (in blocks)
   heal-radius: 10
-  # Update interval (in ticks)
   update-interval: 20
-  # Prioritize lowest energy players
   prioritize-lowest: true
-  # Particle effects
   play-effects: true
   particle: HAPPY_VILLAGER
   particle-count: 5
